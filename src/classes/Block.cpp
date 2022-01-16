@@ -46,12 +46,14 @@ Coords Block::GetPrevCoords() {
   return prevCoords;
 }
 
-void Block::Frame(std::vector<std::vector<std::string>> board) {
+void Block::Snapshot() {
   for (int i = 0; i < shape.size(); i++) {
     prevShape[i].ChangeY(shape[i].GetY());
   }
+}
 
-  if (CheckCollision(shape)) {
+void Block::Frame(std::vector<std::vector<std::string>> board) {
+  if (CheckCollision(shape, board)) {
     for (int i = 0; i < shape.size(); i++) {
       shape[i].ChangeY(shape[i].GetY() + 1);
     }
@@ -62,9 +64,12 @@ void Block::Frame(std::vector<std::vector<std::string>> board) {
   }
 }
 
-bool Block::CheckCollision(std::vector<Coords> localShape) {
+bool Block::CheckCollision(std::vector<Coords> localShape, std::vector<std::vector<std::string>> board) {
   int maxY;
   for (int i = 0; i < localShape.size(); i++) {
+    if (board[std::min(localShape[i].GetY() + 1, 19)][localShape[i].GetX()] != "#") {
+      return false;
+    }
     maxY = std::max(localShape[i].GetY(), maxY);
   }
   return maxY < 19;

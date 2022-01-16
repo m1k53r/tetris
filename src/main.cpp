@@ -21,7 +21,10 @@ int main() {
     c = getch();
     //napms(1000);
     block.Move(c);
-    block.Frame(main.GetBoard());
+
+    block.Snapshot();
+    block.Frame(main.GetCopyBoard());
+    main.RemoveLast(block);
     main.ChangePosition(block);
   }
 

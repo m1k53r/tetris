@@ -14,7 +14,8 @@ public:
   Coords GetCoords();
   Coords GetPrevCoords();
   void Frame(std::vector<std::vector<std::string>>);
-  bool CheckCollision(std::vector<Coords> localShape);
+  bool CheckCollision(std::vector<Coords> localShape, std::vector<std::vector<std::string>> board);
   std::vector<Coords> GetShape();
   std::vector<Coords> GetPrevShape();
+  void Snapshot();
 };
