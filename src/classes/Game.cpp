@@ -30,12 +30,15 @@ void Game::Draw() {
 }
 
 void Game::ChangePosition(Block block) {
-  //  && board[std::min(block.GetCoords().GetY() + 1, 19)][block.GetCoords().GetX()] != "*"
-  // block.GetPrevCoords().GetY() < 19
-  if (block.GetPrevCoords().GetY() < 19 && board[std::min(block.GetPrevCoords().GetY() + 1, 19)][block.GetPrevCoords().GetX()] != "*") {
-    board[block.GetPrevCoords().GetY()][block.GetPrevCoords().GetX()] = "#";
+  //if (block.CheckCollision(block.GetPrevShape())) {
+    for (int i = 0; i < block.GetPrevShape().size(); i++) {
+      board[block.GetPrevShape()[i].GetY()][block.GetPrevShape()[i].GetX()] = "#";
+    }
+  //}
+
+  for (int i = 0; i < block.GetShape().size(); i++) {
+    board[block.GetShape()[i].GetY()][block.GetShape()[i].GetX()] = "*";
   }
-  board[block.GetCoords().GetY()][block.GetCoords().GetX()] = "*";
 }
 
 bool Game::CheckWin() {

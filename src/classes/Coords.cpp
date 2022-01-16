@@ -5,6 +5,11 @@ Coords::Coords() {
   y = 0;
 }
 
+Coords::Coords(int x, int y) {
+  this->x = x;
+  this->y = y;
+}
+
 void Coords::ChangeX(int x) {
   this->x = x;
 }

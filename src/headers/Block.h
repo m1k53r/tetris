@@ -5,6 +5,8 @@
 class Block {
   Coords prevCoords;
   Coords coords;
+  std::vector<Coords> shape;
+  std::vector<Coords> prevShape;
 
 public:
   Block();
@@ -12,4 +14,7 @@ public:
   Coords GetCoords();
   Coords GetPrevCoords();
   void Frame(std::vector<std::vector<std::string>>);
+  bool CheckCollision(std::vector<Coords> localShape);
+  std::vector<Coords> GetShape();
+  std::vector<Coords> GetPrevShape();
 };
