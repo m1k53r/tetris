@@ -18,4 +18,5 @@ public:
   std::vector<Coords> GetShape();
   std::vector<Coords> GetPrevShape();
   void Snapshot();
+  void RotateBlock();
 };

@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <vector>
 #include "../headers/Block.h"
+#include <math.h>
+#define PI 3.14159265
 
 Block::Block() {
   shape.push_back(Coords(0, 0));
@@ -34,6 +36,9 @@ void Block::Move(char c) {
       for (int i = 0; i < shape.size(); i++) {
         shape[i].ChangeX(shape[i].GetX() + 1);
       }
+      break;
+    case 'r':
+      RotateBlock();
       break;
   }
 }
@@ -82,3 +87,23 @@ std::vector<Coords> Block::GetShape() {
 std::vector<Coords> Block::GetPrevShape() {
   return prevShape;
 }
+
+void Block::RotateBlock() {
+  Snapshot();
+  std::vector<Coords> tempShape;
+  int centerx = shape[0].GetX();
+  int centery = shape[0].GetY();
+  int degrees = 90;
+
+  for (int i = 0; i < shape.size(); i++) {
+    int x = shape[i].GetX();
+    int y = shape[i].GetY();
+    int newx = (x - centerx) * cos(degrees * PI / 180) - (y - centery) * sin(degrees * PI / 180) + centerx;
+    int newy = (x - centerx) * sin(degrees * PI / 180) + (y - centery) * cos(degrees * PI / 180) + centery;
+
+    tempShape.push_back(Coords(newx, newy));
+  }
+
+  shape = tempShape;
+}
+
