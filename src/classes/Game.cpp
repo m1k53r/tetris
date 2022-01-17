@@ -23,7 +23,6 @@ void Game::Stop() {
 
 void Game::Draw() {
   clear();
-  printw("Points: %i\n", points);
   addch(ACS_ULCORNER);
   for (int i = 0; i < 30; i++) addch(ACS_HLINE);
   addch(ACS_URCORNER);
@@ -49,6 +48,7 @@ void Game::Draw() {
   addch(ACS_LLCORNER);
   for (int i = 0; i < 30; i++) addch(ACS_HLINE);
   addch(ACS_LRCORNER);
+  printw("\nPoints: %i\n", points);
 }
 
 void Game::RemoveLast(Block block) {

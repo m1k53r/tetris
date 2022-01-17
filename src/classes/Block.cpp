@@ -13,27 +13,6 @@ const std::vector<Coords> ZBLOCK = {Coords(0,0), Coords(1,0), Coords(1,1), Coord
 
 Block::Block() {
   GenerateBlock();
-  /*
-  shape.push_back(Coords(0, 0));
-  shape.push_back(Coords(0, 1));
-  shape.push_back(Coords(1, 1));
-  shape.push_back(Coords(2, 1));
-
-  prevShape.push_back(Coords(0, 0));
-  prevShape.push_back(Coords(0, 1));
-  prevShape.push_back(Coords(1, 1));
-  prevShape.push_back(Coords(2, 1));
-
-  shape.push_back(Coords(0, 1));
-  shape.push_back(Coords(1, 1));
-  shape.push_back(Coords(2, 1));
-  shape.push_back(Coords(1, 0));
-
-  prevShape.push_back(Coords(0, 1));
-  prevShape.push_back(Coords(1, 1));
-  prevShape.push_back(Coords(2, 1));
-  prevShape.push_back(Coords(1, 0));
-  */
 }
 
 void Block::Move(char c) {
@@ -107,19 +86,17 @@ std::vector<Coords> Block::GetPrevShape() {
 }
 
 void Block::RotateBlock() {
-  // var newx = (x - centerx) * Math.cos(degrees * Math.PI / 180) - (y - centery) * Math.sin(degrees * math.PI / 180) + centerx;
-  // var newy = (x - centerx) * Math.sin(degrees * Math.PI / 180) + (y - centery) * Math.cos(degrees * math.PI / 180) + centery;
   Snapshot();
   std::vector<Coords> tempShape;
-  int centerx = shape[0].GetX();
-  int centery = shape[0].GetY();
+  int centerx = shape[1].GetX();
+  int centery = shape[1].GetY();
   int degrees = 90;
 
   for (int i = 0; i < shape.size(); i++) {
     int x = shape[i].GetX();
     int y = shape[i].GetY();
-    int newx = (x - centerx) * cos(degrees * PI / 180) - (y - centery) * sin(degrees * PI / 180) + centerx;
-    int newy = (x - centerx) * sin(degrees * PI / 180) + (y - centery) * cos(degrees * PI / 180) + centery;
+    int newx = (x - centerx) * cos(degrees * PI / 180) - (y - centery) * sin(degrees * PI / 180) + centerx + 0.5;
+    int newy = (x - centerx) * sin(degrees * PI / 180) + (y - centery) * cos(degrees * PI / 180) + centery + 0.5;
 
     tempShape.push_back(Coords(newx, newy));
   }
