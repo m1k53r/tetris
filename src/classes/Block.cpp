@@ -5,7 +5,15 @@
 #include <math.h>
 #define PI 3.14159265
 
+const std::vector<Coords> LBLOCK = {Coords(0,0), Coords(0,1), Coords(1,1), Coords(2,1)};
+const std::vector<Coords> TBLOCK = {Coords(0,1), Coords(1,1), Coords(2,1), Coords(1,0)};
+const std::vector<Coords> SQUAREBLOCK = {Coords(0,0), Coords(0,1), Coords(1,0), Coords(1,1)};
+const std::vector<Coords> LONGBLOCK = {Coords(0,0), Coords(1,0), Coords(2,0), Coords(3,0), Coords(4,0)};
+const std::vector<Coords> ZBLOCK = {Coords(0,0), Coords(1,0), Coords(1,1), Coords(2,1)};
+
 Block::Block() {
+  GenerateBlock();
+  /*
   shape.push_back(Coords(0, 0));
   shape.push_back(Coords(0, 1));
   shape.push_back(Coords(1, 1));
@@ -15,6 +23,17 @@ Block::Block() {
   prevShape.push_back(Coords(0, 1));
   prevShape.push_back(Coords(1, 1));
   prevShape.push_back(Coords(2, 1));
+
+  shape.push_back(Coords(0, 1));
+  shape.push_back(Coords(1, 1));
+  shape.push_back(Coords(2, 1));
+  shape.push_back(Coords(1, 0));
+
+  prevShape.push_back(Coords(0, 1));
+  prevShape.push_back(Coords(1, 1));
+  prevShape.push_back(Coords(2, 1));
+  prevShape.push_back(Coords(1, 0));
+  */
 }
 
 void Block::Move(char c) {
@@ -64,8 +83,7 @@ void Block::Frame(std::vector<std::vector<std::string>> board) {
     }
   }
   else {
-    shape = std::vector<Coords> {Coords(0, 0), Coords(0, 1), Coords(1, 1), Coords(2, 1)};
-    prevShape = std::vector<Coords> {Coords(0, 0), Coords(0, 1), Coords(1, 1), Coords(2, 1)};
+    GenerateBlock();
   }
 }
 
@@ -89,6 +107,8 @@ std::vector<Coords> Block::GetPrevShape() {
 }
 
 void Block::RotateBlock() {
+  // var newx = (x - centerx) * Math.cos(degrees * Math.PI / 180) - (y - centery) * Math.sin(degrees * math.PI / 180) + centerx;
+  // var newy = (x - centerx) * Math.sin(degrees * Math.PI / 180) + (y - centery) * Math.cos(degrees * math.PI / 180) + centery;
   Snapshot();
   std::vector<Coords> tempShape;
   int centerx = shape[0].GetX();
@@ -103,7 +123,30 @@ void Block::RotateBlock() {
 
     tempShape.push_back(Coords(newx, newy));
   }
-
+  
   shape = tempShape;
 }
 
+void Block::GenerateBlock() {
+  int i = rand() % 5;
+  if (i == 0) {
+    shape = LBLOCK;
+    prevShape = LBLOCK;
+  }
+  if (i == 1) {
+    shape = TBLOCK;
+    prevShape = TBLOCK;
+  }
+  if (i == 2) {
+    shape = SQUAREBLOCK;
+    prevShape = SQUAREBLOCK;
+  }
+  if (i == 3) {
+    shape = LONGBLOCK;
+    prevShape = LONGBLOCK;
+  }
+  if (i == 4) {
+    shape = ZBLOCK;
+    prevShape = ZBLOCK;
+  }
+}

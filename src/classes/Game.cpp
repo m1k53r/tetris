@@ -1,13 +1,14 @@
 #include <vector>
 #include <algorithm>
-#include <curses.h>
 #include "../headers/Game.h"
+#include "ncursesw/ncurses.h"
 
 Game::Game() {
   width = 10;
   height = 20;
   gameLoop = false; 
   points = 0;
+  tries = 0;
   board = std::vector<std::vector<std::string>>(height, std::vector<std::string> (width, "#"));
   copyBoard = std::vector<std::vector<std::string>>(height, std::vector<std::string> (width, "#"));
 }
@@ -22,12 +23,32 @@ void Game::Stop() {
 
 void Game::Draw() {
   clear();
+  printw("Points: %i\n", points);
+  addch(ACS_ULCORNER);
+  for (int i = 0; i < 30; i++) addch(ACS_HLINE);
+  addch(ACS_URCORNER);
+  printw("\n");
+
   for (auto columns : board) {
+    addch(ACS_VLINE);
+
     for (auto cells : columns) {
-      printw(cells.c_str());
+      printw(" ");
+
+      if (cells == "#") printw(" ");
+      if (cells == "*") addch(ACS_CKBOARD);
+
+      printw(" ");
+      //printw(cells.c_str());
     }
+
+    addch(ACS_VLINE);
     printw("\n");
   }
+
+  addch(ACS_LLCORNER);
+  for (int i = 0; i < 30; i++) addch(ACS_HLINE);
+  addch(ACS_LRCORNER);
 }
 
 void Game::RemoveLast(Block block) {
@@ -44,8 +65,31 @@ void Game::ChangePosition(Block block) {
   }
 }
 
-bool Game::CheckWin() {
-  return false;
+void Game::CheckWin() {
+  int blocks;
+  int pos = -1;
+  for (int i = 0; i < copyBoard.size(); i++) {
+    blocks = 0;
+
+    for (int j = 0; j < copyBoard[i].size(); j++) {
+      if (copyBoard[i][j] == "*") blocks++;
+    }
+
+    if (blocks == 10) {
+      points += 10;
+      board[i] = std::vector<std::string>{"#","#","#","#","#","#","#","#","#","#"};
+      pos = i;
+      break;
+    }
+  }
+  for (int i = 0; i < pos; i++) {
+    for (int j = 0; j < board[i].size(); j++) {
+      if (copyBoard[i][j] == "*") {
+        board[i][j] = "#";
+        board[i+1][j] = "*";
+      }
+    } 
+  }
 }
 
 bool Game::IsPlaying() {
@@ -58,4 +102,40 @@ std::vector<std::vector<std::string>> Game::GetBoard() {
 
 std::vector<std::vector<std::string>> Game::GetCopyBoard() {
   return copyBoard;
+}
+
+void Game::CheckLose() {
+  bool found = false;
+  for (int i = 0; i < board[0].size(); i++) {
+    if (board[0][i] == "*") {
+      found = true;
+      tries += 1;
+      break;
+    }
+  }
+  if (!found) {
+    tries = 0;
+  }
+
+  if (tries > 3) {
+    gameLoop = false;
+    printw("\nYou lost");
+    printw("\nWanna continue? (y/n) ");
+    char c = getch();
+    if (c == 'y') {
+      Restart(); 
+    }
+  }
+}
+
+void Game::Restart() {
+  gameLoop = true;
+  points = 0;
+  tries = 0;
+  board = std::vector<std::vector<std::string>>(height, std::vector<std::string> (width, "#"));
+  copyBoard = std::vector<std::vector<std::string>>(height, std::vector<std::string> (width, "#"));
+}
+
+void Game::SwitchBoards() {
+  board = copyBoard; 
 }

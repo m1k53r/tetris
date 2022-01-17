@@ -6,6 +6,7 @@ class Game {
   int width;
   bool gameLoop;
   int points;
+  int tries;
   std::vector<std::vector<std::string>> board;
   std::vector<std::vector<std::string>> copyBoard;
 
@@ -14,10 +15,13 @@ public:
   void Start();
   void Stop();
   void Draw();
-  bool CheckWin();
+  void CheckWin();
   bool IsPlaying();
   void RemoveLast(Block block);
   void ChangePosition(Block block);
   std::vector<std::vector<std::string>> GetBoard();
   std::vector<std::vector<std::string>> GetCopyBoard();
+  void CheckLose();
+  void Restart();
+  void SwitchBoards();
 };
