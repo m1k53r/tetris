@@ -82,7 +82,7 @@ void Game::CheckWin() {
       break;
     }
   }
-  for (int i = 0; i < pos; i++) {
+  for (int i = pos-1; i > 0; i--){
     for (int j = 0; j < board[i].size(); j++) {
       if (copyBoard[i][j] == "*") {
         board[i][j] = "#";

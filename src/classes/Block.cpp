@@ -21,18 +21,31 @@ void Block::Move(char c) {
     prevShape[i].ChangeX(shape[i].GetX());
   }
 
+  int smallest = 100;
+  int biggest = 0;
+
   switch(c) {
     case 'a':
-      coords.ChangeX( std::max(0, coords.GetX() - 1) );
-
+      //coords.ChangeX( std::max(0, coords.GetX() - 1) );
       for (int i = 0; i < shape.size(); i++) {
-        shape[i].ChangeX(shape[i].GetX() - 1);
+        smallest = std::min(shape[i].GetX(), smallest);
+      }
+      if (smallest > 0) {
+        for (int i = 0; i < shape.size(); i++) {
+          shape[i].ChangeX(shape[i].GetX() - 1);
+        }
       }
       break;
     case 'd':
-      coords.ChangeX( std::min(9, coords.GetX() + 1) );
+      //coords.ChangeX( std::min(9, coords.GetX() + 1) );
       for (int i = 0; i < shape.size(); i++) {
-        shape[i].ChangeX(shape[i].GetX() + 1);
+        biggest = std::max(shape[i].GetX(), biggest);
+      }
+
+      if (biggest < 9) {
+        for (int i = 0; i < shape.size(); i++) {
+          shape[i].ChangeX(shape[i].GetX() + 1);
+        }
       }
       break;
     case 'r':
@@ -97,6 +110,8 @@ void Block::RotateBlock() {
     int y = shape[i].GetY();
     int newx = (x - centerx) * cos(degrees * PI / 180) - (y - centery) * sin(degrees * PI / 180) + centerx + 0.5;
     int newy = (x - centerx) * sin(degrees * PI / 180) + (y - centery) * cos(degrees * PI / 180) + centery + 0.5;
+
+    if ((newx < 0 || newx > 9) || (newy < 0 || newy > 19)) break;
 
     tempShape.push_back(Coords(newx, newy));
   }
