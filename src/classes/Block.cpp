@@ -13,6 +13,8 @@ const std::vector<Coords> ZBLOCK = {Coords(0,0), Coords(1,0), Coords(1,1), Coord
 
 Block::Block() {
   GenerateBlock();
+  shape = nextShape;
+  prevShape = shape;
 }
 
 void Block::Move(char c, std::vector<std::vector<std::string>> board) {
@@ -93,13 +95,14 @@ void Block::Frame(std::vector<std::vector<std::string>> board) {
     }
   }
   else {
+    shape = nextShape;
+    prevShape = shape;
     GenerateBlock();
   }
 }
 
-// bool Block::CheckCollision(std::vector<Coords> localShape, std::vector<std::vector<std::string>> board) {
 bool Block::CheckCollision(std::vector<std::vector<std::string>> board) {
-  int maxY;
+  int maxY = 0;
   for (int i = 0; i < shape.size(); i++) {
     if (board[std::min(shape[i].GetY() + 1, 19)][shape[i].GetX()] != "#") {
       return false;
@@ -156,23 +159,22 @@ void Block::RotateBlock(std::vector<std::vector<std::string>> board) {
 void Block::GenerateBlock() {
   int i = rand() % 5;
   if (i == 0) {
-    shape = LBLOCK;
-    prevShape = LBLOCK;
+    nextShape = LBLOCK;
   }
   if (i == 1) {
-    shape = TBLOCK;
-    prevShape = TBLOCK;
+    nextShape = TBLOCK;
   }
   if (i == 2) {
-    shape = SQUAREBLOCK;
-    prevShape = SQUAREBLOCK;
+    nextShape = SQUAREBLOCK;
   }
   if (i == 3) {
-    shape = LONGBLOCK;
-    prevShape = LONGBLOCK;
+    nextShape = LONGBLOCK;
   }
   if (i == 4) {
-    shape = ZBLOCK;
-    prevShape = ZBLOCK;
+    nextShape = ZBLOCK;
   }
+}
+
+std::vector<Coords> Block::GetNextShape() {
+  return nextShape;
 }

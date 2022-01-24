@@ -7,6 +7,7 @@ class Block {
   Coords coords;
   std::vector<Coords> shape;
   std::vector<Coords> prevShape;
+  std::vector<Coords> nextShape;
 
 public:
   Block();
@@ -20,4 +21,5 @@ public:
   void Snapshot();
   void RotateBlock(std::vector<std::vector<std::string>> board);
   void GenerateBlock();
+  std::vector<Coords> GetNextShape();
 };

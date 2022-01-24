@@ -15,7 +15,7 @@ public:
   Game();
   void Start();
   void Stop();
-  void Draw();
+  void Draw(std::vector<Coords> nexShape);
   void CheckWin();
   bool IsPlaying();
   void RemoveLast(Block block);
@@ -26,4 +26,6 @@ public:
   void Restart();
   void SwitchBoards();
   void HandleDB();
+  std::vector<std::vector<std::string>> DrawNextShape(std::vector<Coords> nextShape);
+  void OutputScoreboard();
 };

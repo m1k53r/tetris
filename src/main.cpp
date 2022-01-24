@@ -22,9 +22,10 @@ int main() {
   main.Start();
   main.HandleDB();
 
+  main.Draw(block.GetNextShape()); 
   while (main.IsPlaying()) {
     timeout(1000);
-    main.Draw(); 
+    main.Draw(block.GetNextShape()); 
     //napms(1000);
     c = getch();
     block.Move(c, main.GetCopyBoard());

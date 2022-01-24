@@ -22,7 +22,7 @@ void Game::Stop() {
   gameLoop = false;
 }
 
-void Game::Draw() {
+void Game::Draw(std::vector<Coords> nextShape) {
   clear();
   addch(ACS_ULCORNER);
   for (int i = 0; i < 30; i++) addch(ACS_HLINE);
@@ -36,7 +36,7 @@ void Game::Draw() {
       printw(" ");
 
       if (cells == "#") printw(" ");
-      if (cells == "*") addch(ACS_CKBOARD);
+      else addch(ACS_CKBOARD);
 
       printw(" ");
       //printw(cells.c_str());
@@ -49,6 +49,19 @@ void Game::Draw() {
   addch(ACS_LLCORNER);
   for (int i = 0; i < 30; i++) addch(ACS_HLINE);
   addch(ACS_LRCORNER);
+
+  printw("\n\n\t    ");
+  for (auto rows : DrawNextShape(nextShape)) {
+    for (auto cells : rows) {
+      printw(" ");
+
+      if (cells == "#") printw(" ");
+      else addch(ACS_CKBOARD);
+
+      printw(" ");
+    }
+    printw("\n\t    ");
+  }
   printw("\nPoints: %i\n", points);
 }
 
@@ -118,7 +131,7 @@ void Game::CheckLose() {
     tries = 0;
   }
 
-  if (tries > 1) {
+  if (tries > 2) {
     nodelay(stdscr, FALSE);
     gameLoop = false;
     printw("\nYou lost");
@@ -128,6 +141,9 @@ void Game::CheckLose() {
       Restart(); 
     }
     else {
+      clear();
+      OutputScoreboard();
+      getch();
       endwin();
     }
   }
@@ -158,4 +174,65 @@ void Game::HandleDB() {
     printw("Database opened successfully");
   }
   sqlite3_close(DB);
+}
+
+std::vector<std::vector<std::string>> Game::DrawNextShape(std::vector<Coords> nextShape) {
+  std::vector<std::vector<std::string>> shapeBoard = {5, std::vector<std::string> (5, "#")};
+  for (auto x : nextShape) {
+    shapeBoard[x.GetY()][x.GetX()] = "*";
+  }
+
+  return shapeBoard;
+}
+
+static int callback(void* data, int argc, char** argv, char** azColName)
+{
+  int i;
+  //fprintf(stderr, "%s: ", (const char*)data);
+
+  addch(ACS_ULCORNER);
+  for (int i = 0; i < 14; i++) addch(ACS_HLINE);
+  addch(ACS_URCORNER);
+  printw("\n| NAME | SCORE |\n");
+  printw("|");
+  for (int i = 0; i < 14; i++) addch(ACS_HLINE);
+  printw("|\n");
+
+  for (i = 0; i < argc; i++) {
+    printw("| %s ", argv[i] ? argv[i] : "NULL");
+  }
+  printw("  |\n");
+
+  addch(ACS_LLCORNER);
+  for (int i = 0; i < 14; i++) addch(ACS_HLINE);
+  addch(ACS_LRCORNER);
+
+  printw("\n");
+  return 0;
+}
+
+void Game::OutputScoreboard() {
+  sqlite3* DB;
+  int exit = 0;
+  exit = sqlite3_open("highscores.db", &DB);
+  std::string data = "CALLBACK FUNCTION";
+
+  std::string sql = "SELECT * FROM scores;";
+  if (exit) {
+      std::cerr << "Error open DB " << sqlite3_errmsg(DB) << std::endl;
+      return;
+  }
+  else
+      std::cout << "Opened Database Successfully!" << std::endl;
+
+  int rc = sqlite3_exec(DB, sql.c_str(), callback, (void*)data.c_str(), NULL);
+
+  if (rc != SQLITE_OK)
+      std::cerr << "Error SELECT" << std::endl;
+  else {
+    std::cout << "Operation OK!" << std::endl;
+  }
+
+  sqlite3_close(DB);
+  return;
 }
