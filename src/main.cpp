@@ -20,13 +20,14 @@ int main() {
   Block block;
   char c;
   main.Start();
+  main.HandleDB();
 
-  timeout(1000);
   while (main.IsPlaying()) {
+    timeout(1000);
     main.Draw(); 
     //napms(1000);
     c = getch();
-    block.Move(c);
+    block.Move(c, main.GetCopyBoard());
     if (c == 'r') main.SwitchBoards();
 
     block.Snapshot();
@@ -40,4 +41,5 @@ int main() {
   // outro
   getch();
   endwin();
+  return 0;
 }

@@ -10,14 +10,14 @@ class Block {
 
 public:
   Block();
-  void Move(char c);
+  void Move(char c, std::vector<std::vector<std::string>> board);
   Coords GetCoords();
   Coords GetPrevCoords();
   void Frame(std::vector<std::vector<std::string>>);
-  bool CheckCollision(std::vector<Coords> localShape, std::vector<std::vector<std::string>> board);
+  bool CheckCollision(std::vector<std::vector<std::string>> board);
   std::vector<Coords> GetShape();
   std::vector<Coords> GetPrevShape();
   void Snapshot();
-  void RotateBlock();
+  void RotateBlock(std::vector<std::vector<std::string>> board);
   void GenerateBlock();
 };

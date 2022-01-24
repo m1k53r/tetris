@@ -6,6 +6,7 @@ class Game {
   int width;
   bool gameLoop;
   int points;
+  int highscore;
   int tries;
   std::vector<std::vector<std::string>> board;
   std::vector<std::vector<std::string>> copyBoard;
@@ -24,4 +25,5 @@ public:
   void CheckLose();
   void Restart();
   void SwitchBoards();
+  void HandleDB();
 };

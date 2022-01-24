@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "../headers/Game.h"
 #include "ncursesw/ncurses.h"
+#include <sqlite3.h>
 
 Game::Game() {
   width = 10;
@@ -117,7 +118,8 @@ void Game::CheckLose() {
     tries = 0;
   }
 
-  if (tries > 3) {
+  if (tries > 1) {
+    nodelay(stdscr, FALSE);
     gameLoop = false;
     printw("\nYou lost");
     printw("\nWanna continue? (y/n) ");
@@ -125,10 +127,14 @@ void Game::CheckLose() {
     if (c == 'y') {
       Restart(); 
     }
+    else {
+      endwin();
+    }
   }
 }
 
 void Game::Restart() {
+  nodelay(stdscr, TRUE);
   gameLoop = true;
   points = 0;
   tries = 0;
@@ -138,4 +144,18 @@ void Game::Restart() {
 
 void Game::SwitchBoards() {
   board = copyBoard; 
+}
+
+void Game::HandleDB() {
+  sqlite3* DB;
+  int exit = 0;
+  exit = sqlite3_open("highscores.db", &DB);
+
+  if (exit) {
+    printw("Error open DB");
+  }
+  else {
+    printw("Database opened successfully");
+  }
+  sqlite3_close(DB);
 }
