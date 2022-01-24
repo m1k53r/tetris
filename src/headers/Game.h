@@ -28,4 +28,5 @@ public:
   void HandleDB();
   std::vector<std::vector<std::string>> DrawNextShape(std::vector<Coords> nextShape);
   void OutputScoreboard();
+  void GetName();
 };

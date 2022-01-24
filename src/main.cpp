@@ -20,7 +20,8 @@ int main() {
   Block block;
   char c;
   main.Start();
-  main.HandleDB();
+  //main.HandleDB();
+  //main.GetName();
 
   main.Draw(block.GetNextShape()); 
   while (main.IsPlaying()) {
